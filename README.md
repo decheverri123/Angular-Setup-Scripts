@@ -11,3 +11,4 @@ This script sets up a new Angular project with Tailwind CSS and DaisyUI.
 ```bash
 ./create-ang-tail-app.sh <project_name>
 ```
+Replace <project_name> with the desired name for your Angular project.
