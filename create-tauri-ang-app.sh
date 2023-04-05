@@ -37,6 +37,7 @@ echo -e "@import 'tailwindcss/base';\n@import 'tailwindcss/components';\n@import
 
 # Install Tauri dependencies and CLI
 npm install -D @tauri-apps/cli
+npm install @tauri-apps/api
 npx tauri init
 
 # Add the "tauri:tauri" script to the package.json file
