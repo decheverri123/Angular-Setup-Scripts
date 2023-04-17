@@ -1,21 +1,24 @@
 #!/bin/bash
 
-# Check if a project name is provided and set the project name
+# Check if a project name is provided
 if [ -z "$1" ]; then
-  echo "Please provide a project name"
+  echo "Usage: ./create-tauri-tailwind-app.sh <projectname>"
   exit 1
-else
-  PROJECT_NAME=$1
 fi
 
-# Create a new Angular project and navigate to the project directory
-ng new $PROJECT_NAME --style=css --routing=true && cd $PROJECT_NAME
+PROJECT_NAME=$1
 
-# Install Tailwind CSS, Tauri dependencies, and other required packages
-npm install -D tailwindcss postcss autoprefixer daisyui @tauri-apps/cli @tauri-apps/api
+# Create a new Tauri app with the specified project name
+yarn create tauri-app $PROJECT_NAME
 
-# Initialize Tailwind CSS and create a tailwind.config.js file
-npx tailwindcss init -p
+# Change to the newly created project directory
+cd $PROJECT_NAME
+
+# Add the required packages
+yarn add tailwindcss@latest daisyui@latest @tauri-apps/cli @tauri-apps/api
+
+# Initialize TailwindCSS
+npx tailwindcss init
 cat > tailwind.config.js <<- EOF
 module.exports = {
   content: ["./src/**/*.{html,ts}"],
@@ -24,14 +27,18 @@ module.exports = {
 }
 EOF
 
-# Update src/styles.scss
-echo -e "@import 'tailwindcss/base';\n@import 'tailwindcss/components';\n@import 'tailwindcss/utilities';" >> src/styles.css
+# Replace src/styles.css with TailwindCSS files
+echo '@tailwind base;' > src/styles.css
+echo '@tailwind components;' >> src/styles.css
+echo '@tailwind utilities;' >> src/styles.css
 
-# Initialize Tauri
-npx tauri init
+# Print a success message
+echo "Tauri app with TailwindCSS and DaisyUI has been created successfully."
 
-# Add the "tauri:tauri" script to the package.json file
-jq '.scripts += {"tauri": "tauri"}' package.json > package.json.tmp && mv package.json.tmp package.json
+echo "Opening VS Code..."
 
-# Instructions for starting the project
-echo -e "Project setup complete. To start, run:\ncd $PROJECT_NAME\nnpm run tauri dev"
+# Open the project in VS Code
+code .
+
+# Running Yarn
+yarn 
